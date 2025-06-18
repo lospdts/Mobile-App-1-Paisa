@@ -70,10 +70,17 @@ ensureDataFile('interests.json', [
 ]);
 
 // Initialize admin credentials file
-ensureDataFile('admin.json', {
+// ensureDataFile('admin.json', {
+//     username: 'admin',
+//     password: 'admin' // In production, this should be hashed
+// });
+
+// Manually create admin.json with correct credentials
+const adminFilePath = path.join(__dirname, 'data', 'admin.json');
+fs.writeFileSync(adminFilePath, JSON.stringify({
     username: 'admin',
-    password: 'admin' // In production, this should be hashed
-});
+    password: 'admin'
+}, null, 2));
 
 // Authentication endpoints
 app.post('/api/auth/login', (req, res) => {
