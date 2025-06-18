@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "title": "Krunk Points: Drank 5+ Beverages This Week",
+    "type": "Drinking",
+    "startDate": "2025-06-15",
+    "endDate": "2025-10-01",
+    "status": "active",
+    "points": 5
+  },
+  {
+    "id": "2",
+    "title": "Clown A Fool: Talked Shit On This Thread",
+    "type": "Shit Talking",
+    "startDate": "2025-06-15",
+    "endDate": "2025-10-14",
+    "status": "active",
+    "points": 2
+  },
+  {
+    "id": "1750285800384",
+    "title": "Hands In The Pants This Week",
+    "type": "Shenanigans",
+    "startDate": "2025-06-15",
+    "endDate": "2025-10-15",
+    "points": 5,
+    "status": "active"
+  },
+  {
+    "id": "1750285894484",
+    "title": "Baby Mama Drama: Have 2+ Baby Mamas",
+    "type": "Shenanigans",
+    "startDate": "2025-06-15",
+    "endDate": "2025-10-15",
+    "points": 10,
+    "status": "active"
+  }
+]

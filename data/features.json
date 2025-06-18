@@ -1,0 +1,19 @@
+[
+  {
+    "id": "1",
+    "name": "Social Feed",
+    "status": "active",
+    "testers": [
+      "user1",
+      "user2"
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Challenge Tracker",
+    "status": "testing",
+    "testers": [
+      "user3"
+    ]
+  }
+]
