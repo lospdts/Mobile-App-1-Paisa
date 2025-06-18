@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -41,8 +42,8 @@ const writeData = (filename, data) => {
 
 // Initialize data files if they don't exist
 ensureDataFile('users.json', [
-    { id: '1', name: 'John Doe', email: 'john@example.com', status: 'active', points: 0, completedChallenges: [] },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com', status: 'active', points: 0, completedChallenges: [] }
+    { id: '1', name: 'John Doe', email: 'john@example.com', password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', status: 'active', points: 0, completedChallenges: [] },
+    { id: '2', name: 'Jane Smith', email: 'jane@example.com', password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', status: 'active', points: 0, completedChallenges: [] }
 ]);
 
 ensureDataFile('challenges.json', [
@@ -111,6 +112,98 @@ app.post('/api/auth/change-password', (req, res) => {
     writeData('admin.json', adminCredentials);
     
     res.json({ message: 'Password changed successfully' });
+});
+
+// User registration endpoint
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        
+        // Validate input
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+        
+        if (password.length < 6) {
+            return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+        }
+        
+        // Check if user already exists
+        const users = readData('users.json');
+        const existingUser = users.find(user => user.email === email);
+        
+        if (existingUser) {
+            return res.status(400).json({ error: 'User with this email already exists' });
+        }
+        
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Create new user
+        const newUser = {
+            id: Date.now().toString(),
+            name: name,
+            email: email,
+            password: hashedPassword,
+            status: 'active',
+            points: 0,
+            completedChallenges: [],
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        writeData('users.json', users);
+        
+        res.status(201).json({ 
+            message: 'User registered successfully',
+            userId: newUser.id
+        });
+    } catch (error) {
+        console.error('Registration error:', error);
+        res.status(500).json({ error: 'Registration failed' });
+    }
+});
+
+// User login endpoint
+app.post('/api/auth/user-login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ error: 'Email and password are required' });
+        }
+        
+        // Find user
+        const users = readData('users.json');
+        const user = users.find(u => u.email === email);
+        
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        // Check password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        
+        if (!isValidPassword) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        
+        // Check if user is active
+        if (user.status !== 'active') {
+            return res.status(401).json({ error: 'Account is not active' });
+        }
+        
+        res.json({
+            token: 'user-token-' + user.id,
+            userId: user.id,
+            name: user.name,
+            email: user.email
+        });
+    } catch (error) {
+        console.error('User login error:', error);
+        res.status(500).json({ error: 'Login failed' });
+    }
 });
 
 // CRUD endpoints for users, challenges, and features
@@ -386,6 +479,11 @@ app.get('/user-dashboard', (req, res) => {
 // Login page route
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Signup page route
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
 // Default route - serve login page

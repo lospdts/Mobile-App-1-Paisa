@@ -6,12 +6,21 @@ let userCompletedChallenges = [];
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
-    // For demo purposes, we'll use a hardcoded user ID
-    // In a real app, this would come from authentication
+    // Check if user is authenticated
+    const userToken = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+    const userName = localStorage.getItem('userName');
+    
+    if (!userToken || !userId) {
+        // Redirect to login if not authenticated
+        window.location.href = '/login.html';
+        return;
+    }
+    
     currentUser = {
-        id: '1',
-        name: 'John Doe',
-        email: 'john@example.com'
+        id: userId,
+        name: userName || 'User',
+        email: localStorage.getItem('userEmail') || ''
     };
     
     loadUserData();
@@ -221,8 +230,12 @@ async function confirmChallengeCompletion() {
 }
 
 function logout() {
-    // In a real app, this would clear authentication tokens
-    alert('Logout functionality would be implemented here');
-    // Redirect to login page or home page
+    // Clear authentication data
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    
+    // Redirect to login
     window.location.href = '/login.html';
 } 

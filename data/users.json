@@ -3,12 +3,18 @@
     "id": "1",
     "name": "John Doe",
     "email": "john@example.com",
-    "status": "active"
+    "password": "$2a$10$zWVz/AkuZc2uZXdJtMwPdegzpbGkZBb0nXJRZLwCyB/Cw572/FCZy",
+    "status": "active",
+    "points": 0,
+    "completedChallenges": []
   },
   {
     "id": "2",
     "name": "Jane Smith",
     "email": "jane@example.com",
-    "status": "active"
+    "password": "$2a$10$zWVz/AkuZc2uZXdJtMwPdegzpbGkZBb0nXJRZLwCyB/Cw572/FCZy",
+    "status": "active",
+    "points": 0,
+    "completedChallenges": []
   }
 ]
