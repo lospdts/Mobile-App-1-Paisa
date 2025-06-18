@@ -77,12 +77,15 @@ ensureDataFile('admin.json', {
 
 // Authentication endpoints
 app.post('/api/auth/login', (req, res) => {
-    console.log('Login attempt:', req.body);
+    console.log('Admin login attempt:', req.body);
     const { username, password } = req.body;
     const adminCredentials = readData('admin.json');
     
     if (username === adminCredentials.username && password === adminCredentials.password) {
-        res.json({ token: 'demo-token' });
+        res.json({ 
+            token: 'admin-token-' + Date.now(),
+            isAdmin: true
+        });
     } else {
         res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -479,6 +482,11 @@ app.get('/user-dashboard', (req, res) => {
 // Login page route
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Admin login page route
+app.get('/admin-login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin-login.html'));
 });
 
 // Signup page route

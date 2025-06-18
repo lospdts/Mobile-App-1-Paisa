@@ -1,8 +1,10 @@
 // Check authentication on page load
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('adminToken');
-    if (!token) {
-        window.location.href = '/login.html';
+    const isAdmin = localStorage.getItem('isAdmin');
+    
+    if (!token || !isAdmin) {
+        window.location.href = '/admin-login.html';
         return;
     }
 
@@ -49,6 +51,7 @@ async function login(username, password) {
 
         const data = await response.json();
         localStorage.setItem('adminToken', data.token);
+        localStorage.setItem('isAdmin', data.isAdmin);
         window.location.href = '/admin.html';
     } catch (error) {
         alert(error.message);
@@ -67,9 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Logout error:', e);
             }
             localStorage.removeItem('adminToken');
+            localStorage.removeItem('isAdmin');
             sessionStorage.removeItem('adminToken');
             document.cookie = 'adminToken=; Max-Age=0; path=/;';
-            window.location.href = '/login.html';
+            window.location.href = '/admin-login.html';
         });
     } else {
         console.error('Logout button not found');
@@ -135,7 +139,8 @@ async function changePassword() {
         // Optionally log out the user after password change for security
         if (confirm('For security reasons, you will be logged out. Do you want to continue?')) {
             localStorage.removeItem('adminToken');
-            window.location.href = '/login.html';
+            localStorage.removeItem('isAdmin');
+            window.location.href = '/admin-login.html';
         }
     } catch (error) {
         console.error('Error changing password:', error);
