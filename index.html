@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaisaStripes - Beta Testing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-box {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            transition: transform 0.2s;
+        }
+        .admin-box:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Admin Tools Banner -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-2 px-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <i class="fas fa-tools text-xl"></i>
+                <span class="font-semibold">Admin Tools</span>
+            </div>
+            <a href="/admin.html" class="bg-white text-purple-600 px-4 py-1 rounded-full text-sm font-medium hover:bg-purple-50 transition-colors">
+                Access Admin Panel
+            </a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-2xl font-bold text-blue-600">PaisaStripes</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/login.html" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Admin Tools Quick Access -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <a href="/admin.html?section=challenges" class="admin-box p-6 rounded-lg shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <i class="fas fa-trophy text-3xl"></i>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Weekly Challenges</h3>
+                <p class="text-purple-100">Manage and create new weekly challenges</p>
+            </a>
+            <a href="/admin.html?section=profiles" class="admin-box p-6 rounded-lg shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <i class="fas fa-users text-3xl"></i>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Profile Management</h3>
+                <p class="text-purple-100">Configure user profiles and settings</p>
+            </a>
+            <a href="/admin.html?section=community" class="admin-box p-6 rounded-lg shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <i class="fas fa-comments text-3xl"></i>
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Community Settings</h3>
+                <p class="text-purple-100">Manage community features and interactions</p>
+            </a>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Welcome to PaisaStripes Beta!</h2>
+            <p class="text-gray-600">Join us in shaping the future of financial management. Your feedback is invaluable in making PaisaStripes the best it can be.</p>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Beta Testing Benefits</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 border rounded-lg">
+                    <i class="fas fa-flask text-3xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold mb-2">Test New Features</h3>
+                    <p class="text-gray-600">Be the first to try our latest features and provide valuable feedback.</p>
+                </div>
+                <div class="p-4 border rounded-lg">
+                    <i class="fas fa-comments text-3xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold mb-2">Shape the Product</h3>
+                    <p class="text-gray-600">Your input directly influences the development of PaisaStripes.</p>
+                </div>
+                <div class="p-4 border rounded-lg">
+                    <i class="fas fa-gift text-3xl text-blue-600 mb-3"></i>
+                    <h3 class="text-lg font-semibold mb-2">Exclusive Benefits</h3>
+                    <p class="text-gray-600">Get early access to premium features and special rewards.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="bg-white p-6 rounded-lg shadow mb-12">
+            <h3 class="text-xl font-semibold mb-4">Submit Feedback</h3>
+            <form id="feedbackForm" class="space-y-4">
+                <div>
+                    <label for="feature" class="block text-sm font-medium text-gray-700">Select Feature</label>
+                    <select id="feature" name="feature" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <option value="">Loading features...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Rating</label>
+                    <div class="mt-2 flex space-x-2">
+                        <button type="button" class="rating-btn px-3 py-1 border rounded-md hover:bg-gray-100" data-rating="1">1</button>
+                        <button type="button" class="rating-btn px-3 py-1 border rounded-md hover:bg-gray-100" data-rating="2">2</button>
+                        <button type="button" class="rating-btn px-3 py-1 border rounded-md hover:bg-gray-100" data-rating="3">3</button>
+                        <button type="button" class="rating-btn px-3 py-1 border rounded-md hover:bg-gray-100" data-rating="4">4</button>
+                        <button type="button" class="rating-btn px-3 py-1 border rounded-md hover:bg-gray-100" data-rating="5">5</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="comments" class="block text-sm font-medium text-gray-700">Comments</label>
+                    <textarea id="comments" name="comments" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                    Submit Feedback
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Load features
+        async function loadFeatures() {
+            try {
+                const response = await fetch('/api/features');
+                const features = await response.json();
+                const select = document.getElementById('feature');
+                select.innerHTML = features.map(feature => 
+                    `<option value="${feature.id}">${feature.name}</option>`
+                ).join('');
+            } catch (error) {
+                console.error('Error loading features:', error);
+            }
+        }
+
+        // Handle feedback submission
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = {
+                featureId: document.getElementById('feature').value,
+                rating: document.querySelector('.rating-btn.selected')?.dataset.rating,
+                comments: document.getElementById('comments').value
+            };
+
+            try {
+                const response = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert('Thank you for your feedback!');
+                    e.target.reset();
+                    document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('selected'));
+                } else {
+                    alert('Error submitting feedback. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                alert('Error submitting feedback. Please try again.');
+            }
+        });
+
+        // Handle rating buttons
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+            });
+        });
+
+        // Load features on page load
+        loadFeatures();
+    </script>
+
+    <style>
+        .rating-btn {
+            @apply w-10 h-10 rounded-full border border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500;
+        }
+        .rating-btn.active {
+            @apply bg-blue-600 text-white border-blue-600;
+        }
+    </style>
+</body>
+</html> 

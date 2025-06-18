@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaisaStripes Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="/admin.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold">PaisaStripes Admin</h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button id="logoutBtn" class="ml-4 px-4 py-2 text-sm text-red-600 hover:text-red-800">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg font-medium text-gray-900">Total Users</h3>
+                        <p id="totalUsers" class="mt-1 text-3xl font-semibold text-gray-900">0</p>
+                    </div>
+                </div>
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg font-medium text-gray-900">Active Features</h3>
+                        <p id="activeFeatures" class="mt-1 text-3xl font-semibold text-gray-900">0</p>
+                    </div>
+                </div>
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg font-medium text-gray-900">Pending Feedback</h3>
+                        <p id="pendingFeedback" class="mt-1 text-3xl font-semibold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">User Growth</h3>
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="px-4 py-5 sm:p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Feature Completion</h3>
+                        <canvas id="featureCompletionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="bg-white shadow rounded-lg mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">User Management</h3>
+                        <div class="flex space-x-2">
+                            <button id="exportUsersBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                Export
+                            </button>
+                            <button id="importUsersBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                Import
+                            </button>
+                            <input type="file" id="importFile" class="hidden" accept=".csv">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- User rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Management -->
+            <div class="bg-white shadow rounded-lg mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Feature Management</h3>
+                        <button id="addFeatureBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Feature
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Testers</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="featuresTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Feature rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Challenges -->
+            <div class="bg-white shadow rounded-lg mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Weekly Challenges</h3>
+                        <div class="flex space-x-2">
+                            <button id="addChallengeTypeBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                Add Challenge Type
+                            </button>
+                            <button id="addChallengeBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                Add Challenge
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Challenge Types -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-medium text-gray-900 mb-2">Challenge Types</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="challengeTypesTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Challenge type rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Challenges List -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="challengesTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Challenge rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interest Topics Management -->
+            <div class="bg-white shadow rounded-lg mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Interest Topics</h3>
+                        <button id="addInterestBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Topic
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="interestsTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Interest topic rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Icon Management -->
+            <div class="bg-white shadow rounded-lg mb-8">
+                <div class="px-4 py-5 sm:p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Icon Management</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Weekly Challenges Icon -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="text-md font-medium text-gray-900 mb-2">Weekly Challenges</h4>
+                            <div class="flex items-center space-x-4">
+                                <img id="weeklyChallengesIcon" src="/uploads/icons/default-challenge.png" alt="Weekly Challenges Icon" class="w-16 h-16 object-contain">
+                                <div class="flex flex-col space-y-2">
+                                    <input type="file" id="weeklyChallengesIconInput" class="hidden" accept="image/*">
+                                    <button onclick="document.getElementById('weeklyChallengesIconInput').click()" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                        Change Icon
+                                    </button>
+                                    <button onclick="resetIcon('weeklyChallenges')" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                                        Reset to Default
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Profile Icon -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="text-md font-medium text-gray-900 mb-2">Profile</h4>
+                            <div class="flex items-center space-x-4">
+                                <img id="profileIcon" src="/uploads/icons/default-profile.png" alt="Profile Icon" class="w-16 h-16 object-contain">
+                                <div class="flex flex-col space-y-2">
+                                    <input type="file" id="profileIconInput" class="hidden" accept="image/*">
+                                    <button onclick="document.getElementById('profileIconInput').click()" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                        Change Icon
+                                    </button>
+                                    <button onclick="resetIcon('profile')" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                                        Reset to Default
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Community Icon -->
+                        <div class="border rounded-lg p-4">
+                            <h4 class="text-md font-medium text-gray-900 mb-2">Community</h4>
+                            <div class="flex items-center space-x-4">
+                                <img id="communityIcon" src="/uploads/icons/default-community.png" alt="Community Icon" class="w-16 h-16 object-contain">
+                                <div class="flex flex-col space-y-2">
+                                    <input type="file" id="communityIconInput" class="hidden" accept="image/*">
+                                    <button onclick="document.getElementById('communityIconInput').click()" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                        Change Icon
+                                    </button>
+                                    <button onclick="resetIcon('community')" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                                        Reset to Default
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Analysis -->
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Feedback Analysis</h3>
+                        <div class="flex space-x-2">
+                            <input type="date" id="startDate" class="px-4 py-2 border rounded">
+                            <input type="date" id="endDate" class="px-4 py-2 border rounded">
+                            <button id="filterFeedbackBtn" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <canvas id="feedbackSentimentChart"></canvas>
+                        </div>
+                        <div>
+                            <canvas id="featureRatingsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="text-lg font-medium text-gray-900 mb-2">Recent Feedback</h4>
+                        <div id="recentFeedback" class="space-y-4">
+                            <!-- Recent feedback items will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="addFeatureModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Feature</h3>
+                <form id="addFeatureForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="featureName">
+                            Feature Name
+                        </label>
+                        <input type="text" id="featureName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="featureDescription">
+                            Description
+                        </label>
+                        <textarea id="featureDescription" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancelAddFeature" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Feature
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Challenge Type Modal -->
+    <div id="addChallengeTypeModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add Challenge Type</h3>
+                <form id="addChallengeTypeForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeTypeName">
+                            Type Name
+                        </label>
+                        <input type="text" id="challengeTypeName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeTypeDescription">
+                            Description
+                        </label>
+                        <textarea id="challengeTypeDescription" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancelAddChallengeType" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Type
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Add Challenge Modal -->
+    <div id="addChallengeModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Challenge</h3>
+                <form id="addChallengeForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeTitle">
+                            Challenge Title
+                        </label>
+                        <input type="text" id="challengeTitle" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeType">
+                            Challenge Type
+                        </label>
+                        <select id="challengeType" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                            <!-- Challenge types will be loaded here -->
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeDescription">
+                            Description
+                        </label>
+                        <textarea id="challengeDescription" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeStartDate">
+                            Start Date
+                        </label>
+                        <input type="date" id="challengeStartDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeEndDate">
+                            End Date
+                        </label>
+                        <input type="date" id="challengeEndDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="challengeReward">
+                            Reward Points
+                        </label>
+                        <input type="number" id="challengeReward" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required min="0">
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancelAddChallenge" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Challenge
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Interest Topic Modal -->
+    <div id="addInterestModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Add Interest Topic</h3>
+                <form id="addInterestForm">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="interestName">
+                            Topic Name
+                        </label>
+                        <input type="text" id="interestName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="interestDescription">
+                            Description
+                        </label>
+                        <textarea id="interestDescription" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancelAddInterest" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                            Add Topic
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="admin.js"></script>
+</html> 

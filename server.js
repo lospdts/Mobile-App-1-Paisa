@@ -383,6 +383,16 @@ app.get('/user-dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'user-dashboard.html'));
 });
 
+// Login page route
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// Default route - serve login page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
 // Challenges CRUD
 app.get('/api/challenges', (req, res) => {
     const challenges = readData('challenges.json');
